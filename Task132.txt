@@ -1,0 +1,158 @@
+ import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.*;
+
+public class ExcelReadWrite {
+    public static void main(String[] args) {
+        // Write data to Excel file
+        writeDataToExcel();
+
+        // Read data from Excel file
+        readDataFromExcel();
+    }
+
+    private static void writeDataToExcel() {
+        try {
+            // Create a new Excel workbook
+            Workbook workbook = new XSSFWorkbook();
+
+            // Create a new sheet with the name "Sheet1"
+            Sheet sheet = workbook.createSheet("Sheet1");
+
+            // Write column headers
+            Row headerRow = sheet.createRow(0);
+            headerRow.createCell(0).setCellValue("Name");
+            headerRow.createCell(1).setCellValue("Age");
+            headerRow.createCell(2).setCellValue("Email");
+
+            // Write data to the sheet
+            String[][] data = {
+                {"John Doe", "30", "john@test.com"},
+                {"Jane Doe", "28", "jane@test.com"},
+                {"Bob Smith", "35", "bob@test.com"},
+                {"Swapnil", "37", "swapnil@example.com"}
+            };
+
+            for (int i = 0; i < data.length; i++) {
+                Row row = sheet.createRow(i + 1);
+                for (int j = 0; j < data[i].length; j++) {
+                    row.createCell(j).setCellValue(data[i][j]);
+                }
+            }
+
+            // Write the workbook content to a file
+            FileOutputStream fileOut = new FileOutputStream("output.xlsx");
+            workbook.write(fileOut);
+            fileOut.close();
+
+            // Close the workbook
+            workbook.close();
+
+            System.out.println("Excel file created successfully.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void readDataFromExcel() {
+        try {
+            // Open the Excel file for reading
+            FileInputStream fileIn = new FileInputStream("output.xlsx");
+            Workbook workbook = new XSSFWorkbook(fileIn);
+            Sheet sheet = workbook.getSheet("Sheet1");
+
+            // Iterate through rows and columns to read data
+            System.out.println("Reading data from Excel file:");
+            for (Row row : sheet) {
+                for (Cell cell : row) {
+                    System.out.print(cell.getStringCellValue() + "\t");
+                }
+                System.out.println();
+            }
+
+            // Close the workbook and input stream
+            workbook.close();
+            fileIn.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+----------------------OUTPUT----------------------------------------------
+
+Excel file created successfully.
+Reading data from Excel file:
+Name         Age         Email
+John Doe     30          john@test.com
+Jane Doe     28          jane@test.com
+Bob Smith    35          bob@test.com
+Swapnil      37          swapnil@example.com
+ 
+
+
+Write files
+
+
+
+package javaTask13Answers;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class WriteData {
+
+	public static void main(String[] args) throws IOException {
+		XSSFWorkbook workbook =new XSSFWorkbook();
+		XSSFSheet sheet =workbook.createSheet("Emp info");
+		
+		Object Empdta[][]= {   {"EmpID","Name","Email"},
+				               {"101","Ram","ram@123"},
+				               {"102","Som","som@123"},
+				               {"103","Jam","jam@123"} };
+		//using for loop
+		
+		int rows=Empdta.length;
+		int cols=Empdta[0].length;
+		
+		System.out.println(rows);
+		System.out.println(cols);
+
+		for(int r=0;r<rows;r++) {
+			XSSFRow row =sheet.createRow(r);
+			
+			for(int c=0;c<cols;c++){
+				XSSFCell cell=row.createCell(c);
+				Object value =Empdta[r][c];
+				
+				if(value instanceof String)
+				    cell.setCellValue((String)value); 
+				if(value instanceof Integer)
+				    cell.setCellValue((Integer)value); 
+				}
+		}
+		String filepath ="D:\\guvi classs\\Class Task answers\\Task13\\WriteData.xlsx";
+		FileOutputStream os=new FileOutputStream(filepath);
+		workbook.write(os);
+		
+		os.close();
+		
+		System.out.println("Employee.xlsx file written succefully...");
+		
+	}
+
+}
+
+----------------------Output-----------------------------------
+
+1
+2
+Employee.xlsx file written succefully...
